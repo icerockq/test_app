@@ -2,7 +2,7 @@
 Test application. Docker (php7.1, nginx, postgres, composer), laravel, vue js.
 
 Выполнить:
-dir /fonts git clone https://github.com/icerockq/test_app.git test_app
+> git clone https://github.com/icerockq/test_app.git test_app
 
 В .../test_app выполнить команду
 
