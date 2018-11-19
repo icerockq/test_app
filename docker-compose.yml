@@ -1,0 +1,47 @@
+version: '3'
+services:
+    web:
+        image: nginx
+        volumes:
+            - ./.docker/conf/nginx/default.conf:/etc/nginx/conf.d/default.conf
+            - ${APP_PATH_HOST}:${APP_PATH_CONTAINER}
+        ports:
+            - 80:80
+        working_dir: ${APP_PATH_CONTAINER}
+        restart: always
+        depends_on:
+            - php
+            - db
+    php:
+        build: .docker
+        restart: always
+        volumes:
+            - ./.docker/conf/php/php.ini:/usr/local/etc/php/conf.d/php.ini
+            - ./.docker/conf/php/xdebug.ini:/usr/local/etc/php/conf.d/xdebug.ini
+            - ${APP_PATH_HOST}:${APP_PATH_CONTAINER}
+        working_dir: ${APP_PATH_CONTAINER}        
+    composer:
+        image: composer
+        volumes:
+            - ${APP_PATH_HOST}:${APP_PATH_CONTAINER}
+        working_dir: ${APP_PATH_CONTAINER}
+        command: composer install
+    db:
+        image: postgres:10.1
+        restart: always
+        environment:
+            - POSTGRES_DB=${DB_NAME}
+            - POSTGRES_USER=${DB_USER}
+            - POSTGRES_PASSWORD=${DB_PASSWORD}
+            - PGDATA=${PGDATA}
+        ports:
+            - 5432:5432
+        volumes:
+            - ./.docker/conf/postgres/:/docker-entrypoint-initdb.d/
+            - ./.docker/conf/postgres/postgresql.conf:/var/lib/postgresql/data/postgresql.conf
+            - ./.docker/conf/postgres/pg_hba.conf:/var/lib/postgresql/data/pg_hba.conf
+    adminer:
+        image: adminer
+        restart: always
+        ports:
+            - 8080:8080
