@@ -14,6 +14,12 @@ docker-compose up --build
 
 Админ панель Postgres по http://localhost:8080
 
+Стандартные данные для входа на сайт:
+
+Логин - `dima` 
+
+Пароль - `dima`
+
 Данные для входа в Админ панель Postgres: 
 
 Логин - `test_user` 
